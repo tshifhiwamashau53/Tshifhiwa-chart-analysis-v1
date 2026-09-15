@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Chart Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">CHART ANALYSIS</p>
+        <h1>Upload a chart.<br><span>Get the setup marked.</span></h1>
+        <p class="sub">Technical chart study using price action, market structure, liquidity, supply & demand, order blocks, fair value gaps and risk management concepts.</p>
+      </div>
+      <div class="badge">EDUCATIONAL TOOL</div>
+    </header>
+
+    <section class="panel upload-panel">
+      <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <button id="uploadBtn" class="primary">Upload chart</button>
+      <p id="fileName" class="muted">PNG, JPG or WEBP</p>
+    </section>
+
+    <section id="workspace" class="workspace hidden">
+      <div class="canvas-wrap">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label for="direction">Analysis mode</label>
+          <select id="direction">
+            <option value="auto">Auto-detect</option>
+            <option value="bullish">Bullish setup</option>
+            <option value="bearish">Bearish setup</option>
+          </select>
+        </div>
+        <button id="analyzeBtn" class="primary analyze">Analyze chart</button>
+        <button id="resetBtn" class="secondary">Reset</button>
+      </div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-head">
+        <div>
+          <p class="eyebrow">ANALYSIS RESULT</p>
+          <h2 id="setupTitle">Setup detected</h2>
+        </div>
+        <span id="confidence" class="confidence">—</span>
+      </div>
+      <div class="levels">
+        <div class="level"><span class="dot entry-dot"></span><div><small>ENTRY ZONE</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>TAKE PROFIT</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>STOP LOSS</small><strong>Marked on chart</strong></div></div>
+      </div>
+      <p id="reasoning" class="reasoning"></p>
+      <p class="notice">No price values are displayed. The overlay is based on visible chart structure and is for educational analysis, not a guaranteed trade signal.</p>
+      <button id="saveBtn" class="primary save">Save annotated chart</button>
+    </section>
+
+    <footer>Built for chart study • No live-price API required</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
