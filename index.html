@@ -3,24 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Chart Analysis</title>
+  <meta name="theme-color" content="#f4f5f7">
+  <title>Tshifhiwa Chart Analyzer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app">
     <header class="hero">
       <div>
-        <p class="eyebrow">CHART ANALYSIS</p>
-        <h1>Upload a chart.<br><span>Get the setup marked.</span></h1>
-        <p class="sub">Technical chart study using price action, market structure, liquidity, supply & demand, order blocks, fair value gaps and risk management concepts.</p>
+        <p class="eyebrow">T.SHIFHIWA • CHART ANALYZER</p>
+        <h1>Read the candles.<br><span>Understand the structure.</span></h1>
+        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity and market structure from the visible chart.</p>
       </div>
-      <div class="badge">EDUCATIONAL TOOL</div>
+      <div class="badge">EDUCATIONAL</div>
     </header>
 
     <section class="panel upload-panel">
       <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-      <button id="uploadBtn" class="primary">Upload chart</button>
-      <p id="fileName" class="muted">PNG, JPG or WEBP</p>
+      <button id="uploadBtn" class="primary">Upload chart screenshot</button>
+      <p id="fileName" class="muted">PNG, JPG or WEBP • Works on mobile</p>
     </section>
 
     <section id="workspace" class="workspace hidden">
@@ -29,14 +30,15 @@
       </div>
       <div class="controls">
         <div class="control-group">
-          <label for="direction">Analysis mode</label>
+          <label for="direction">Analysis direction</label>
           <select id="direction">
-            <option value="auto">Auto-detect</option>
-            <option value="bullish">Bullish setup</option>
-            <option value="bearish">Bearish setup</option>
+            <option value="auto">Read the chart automatically</option>
+            <option value="bullish">Study bullish scenario</option>
+            <option value="bearish">Study bearish scenario</option>
+            <option value="mixed">Show mixed evidence</option>
           </select>
         </div>
-        <button id="analyzeBtn" class="primary analyze">Analyze chart</button>
+        <button id="analyzeBtn" class="primary analyze">Analyze candles & structure</button>
         <button id="resetBtn" class="secondary">Reset</button>
       </div>
     </section>
@@ -45,21 +47,39 @@
       <div class="result-head">
         <div>
           <p class="eyebrow">ANALYSIS RESULT</p>
-          <h2 id="setupTitle">Setup detected</h2>
+          <h2 id="setupTitle">Chart scenario</h2>
         </div>
         <span id="confidence" class="confidence">—</span>
       </div>
+
       <div class="levels">
         <div class="level"><span class="dot entry-dot"></span><div><small>ENTRY ZONE</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot tp-dot"></span><div><small>TAKE PROFIT</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot sl-dot"></span><div><small>STOP LOSS</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>TAKE PROFIT ZONE</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>STOP / INVALIDATION ZONE</small><strong>Marked on chart</strong></div></div>
       </div>
-      <p id="reasoning" class="reasoning"></p>
-      <p class="notice">No price values are displayed. The overlay is based on visible chart structure and is for educational analysis, not a guaranteed trade signal.</p>
-      <button id="saveBtn" class="primary save">Save annotated chart</button>
+
+      <div class="strategy-grid" id="strategyDetails">
+        <div><b>ICT / SMC</b><span>Waiting for analysis</span></div>
+        <div><b>Candles</b><span>Waiting for analysis</span></div>
+        <div><b>Wyckoff / Price Action</b><span>Waiting for analysis</span></div>
+        <div><b>Pattern engine</b><span>Waiting for analysis</span></div>
+      </div>
+
+      <div class="why">
+        <p class="eyebrow">WHY THE SCENARIO EXISTS</p>
+        <p id="reasoning" class="reasoning"></p>
+      </div>
+
+      <div class="future-panel">
+        <div><b>Fundamental context</b><span>News and macroeconomic events can be added as a separate evidence layer. Technical structure and news should be compared, not treated as certainty.</span></div>
+        <div><b>No invented prices</b><span>This version marks zones on the screenshot and does not manufacture price values from the image.</span></div>
+      </div>
+
+      <p class="notice">Visual chart reading can be affected by screenshot quality, chart theme and missing candles/indicators. This is an educational analysis tool, not a guaranteed trade signal.</p>
+      <button id="saveBtn" class="primary save">Save / Share annotated chart</button>
     </section>
 
-    <footer>Built for chart study • No live-price API required</footer>
+    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Pattern study</footer>
   </main>
   <script src="app.js"></script>
 </body>
