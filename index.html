@@ -12,8 +12,8 @@
     <header class="hero">
       <div>
         <p class="eyebrow">T.SHIFHIWA • CHART ANALYZER</p>
-        <h1>Read the candles.<br><span>Understand the structure.</span></h1>
-        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity and market structure from the visible chart.</p>
+        <h1>Read the candles.<br><span>Follow the structure.</span></h1>
+        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity, break-and-retest structure and a hypothetical market path.</p>
       </div>
       <div class="badge">EDUCATIONAL</div>
     </header>
@@ -53,10 +53,24 @@
       </div>
 
       <div class="levels">
-        <div class="level"><span class="dot entry-dot"></span><div><small>ENTRY ZONE</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot tp-dot"></span><div><small>TAKE PROFIT ZONE</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot sl-dot"></span><div><small>STOP / INVALIDATION ZONE</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot entry-dot"></span><div><small>WATCH / CONFIRMATION ZONE</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>POTENTIAL TARGET AREA</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>INVALIDATION AREA</small><strong>Marked on chart</strong></div></div>
       </div>
+
+      <section class="trail-panel">
+        <div class="trail-head">
+          <div>
+            <p class="eyebrow">HYPOTHETICAL MARKET PATH</p>
+            <h3 id="trailTitle">Possible path through the structure</h3>
+          </div>
+          <span id="trailStatus" class="trail-status">WAIT</span>
+        </div>
+        <div class="trail-steps" id="trailSteps">
+          <span>Current area</span><i>→</i><span>Liquidity</span><i>→</i><span>Break</span><i>→</i><span>Retest</span><i>→</i><span>Confirmation</span><i>→</i><span>Continuation</span>
+        </div>
+        <p id="trailExplanation" class="trail-explanation">The analyzer will draw a hypothetical path after the chart is analyzed.</p>
+      </section>
 
       <div class="strategy-grid" id="strategyDetails">
         <div><b>ICT / SMC</b><span>Waiting for analysis</span></div>
@@ -71,15 +85,15 @@
       </div>
 
       <div class="future-panel">
-        <div><b>Fundamental context</b><span>News and macroeconomic events can be added as a separate evidence layer. Technical structure and news should be compared, not treated as certainty.</span></div>
-        <div><b>No invented prices</b><span>This version marks zones on the screenshot and does not manufacture price values from the image.</span></div>
+        <div><b>Confirmation before continuation</b><span>The chart marks the area where a break-and-retest confirmation would be studied. It does not tell you to place a real-money trade.</span></div>
+        <div><b>No invented prices</b><span>This version works from visible chart geometry and does not manufacture price values from the screenshot.</span></div>
       </div>
 
-      <p class="notice">Visual chart reading can be affected by screenshot quality, chart theme and missing candles/indicators. This is an educational analysis tool, not a guaranteed trade signal.</p>
+      <p class="notice">The trail is a hypothetical visual scenario, not a guaranteed prediction. Screenshot quality, missing candles and chart settings can change the result.</p>
       <button id="saveBtn" class="primary save">Save / Share annotated chart</button>
     </section>
 
-    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Pattern study</footer>
+    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Scenario Trail</footer>
   </main>
   <script src="app.js"></script>
 </body>
