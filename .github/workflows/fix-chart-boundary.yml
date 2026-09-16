@@ -1,0 +1,81 @@
+name: Protect chart price scale
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  protect-chart-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch chart annotation boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('app.js')
+          text = path.read_text()
+
+          if 'PLOT_RIGHT_RATIO = 0.86' in text:
+              print('Boundary patch already present.')
+              raise SystemExit(0)
+
+          text = text.replace(
+              "function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }\n",
+              "function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }\n\n// Keep all analysis graphics inside the chart plotting area.\n// The far-right price scale/numbers are part of the original screenshot and must stay untouched.\nconst PLOT_LEFT_RATIO = 0.035;\nconst PLOT_RIGHT_RATIO = 0.86;\nfunction getPlotLeft(){ return canvas.width * PLOT_LEFT_RATIO; }\nfunction getPlotRight(){ return Math.max(getPlotLeft()+40, Math.min(canvas.width * PLOT_RIGHT_RATIO, canvas.width - 8)); }\n"
+          )
+
+          old = """  for(let x=0;x<W;x++){\n    let bull=0,bear=0;"""
+          new = """  const plotRight = Math.floor(getPlotRight());\n  for(let x=0;x<plotRight;x++){\n    let bull=0,bear=0;"""
+          text = text.replace(old, new, 1)
+
+          old = """function drawLine(y,label,kind){\n  const x=canvas.width*.035,w=canvas.width*.93;"""
+          new = """function drawLine(y,label,kind){\n  const x=getPlotLeft(),w=Math.max(1,getPlotRight()-x);"""
+          text = text.replace(old, new, 1)
+
+          old = """function drawZone(y1,y2,label,kind){\n  const x=canvas.width*.035,w=canvas.width*.93;"""
+          new = """function drawZone(y1,y2,label,kind){\n  const x=getPlotLeft(),w=Math.max(1,getPlotRight()-x);"""
+          text = text.replace(old, new, 1)
+
+          old = """  if(label){ctx.font='700 12px system-ui';ctx.fillText(label,clamp((x1+x2)/2-30,6,canvas.width-90),clamp((y1+y2)/2-8,18,canvas.height-8));}"""
+          new = """  if(label){\n    ctx.font='700 12px system-ui';\n    const labelMax=Math.max(6,getPlotRight()-90);\n    ctx.fillText(label,clamp((x1+x2)/2-30,6,labelMax),clamp((y1+y2)/2-8,18,canvas.height-8));\n  }"""
+          text = text.replace(old, new, 1)
+
+          old = """  const x0=last.x;\n  const x1=clamp(x0+canvas.width*.08,x0+20,canvas.width*.38);\n  const x2=clamp(x0+canvas.width*.18,x1+20,canvas.width*.58);\n  const x3=clamp(x0+canvas.width*.30,x2+20,canvas.width*.75);\n  const x4=clamp(x0+canvas.width*.42,x3+20,canvas.width*.92);"""
+          new = """  const x0=clamp(last.x,getPlotLeft(),getPlotRight()-8);\n  const trailRight=Math.max(x0+24,getPlotRight()-12);\n  const span=Math.max(24,trailRight-x0);\n  const x1=clamp(x0+span*.22,x0+8,trailRight);\n  const x2=clamp(x0+span*.45,x1+6,trailRight);\n  const x3=clamp(x0+span*.68,x2+6,trailRight);\n  const x4=clamp(x0+span*.90,x3+6,trailRight);"""
+          text = text.replace(old, new, 1)
+
+          # Add a hard canvas clip around all analysis graphics in analyse().
+          old = """  const recent=candles.length?candles.slice(-Math.min(18,candles.length)):[{top:canvas.height*.25,bottom:canvas.height*.75}];\n  const range=Math.max(16,Math.max(...recent.map(c=>c.bottom))-Math.min(...recent.map(c=>c.top)));"""
+          new = """  const recent=candles.length?candles.slice(-Math.min(18,candles.length)):[{top:canvas.height*.25,bottom:canvas.height*.75}];\n  const range=Math.max(16,Math.max(...recent.map(c=>c.bottom))-Math.min(...recent.map(c=>c.top)));\n  const plotRight=getPlotRight();\n  ctx.save();\n  ctx.beginPath();\n  ctx.rect(0,0,plotRight,canvas.height);\n  ctx.clip();"""
+          text = text.replace(old, new, 1)
+
+          old = """  const trailState=drawMarketTrail(candles,mode,levels,ev);\n  ..."""
+          # The source may contain a longer analyse body; insert restore immediately before the first UI/result section instead.
+          if old not in text:
+              marker = "  const trailState=drawMarketTrail(candles,mode,levels,ev);"
+              if marker in text:
+                  text = text.replace(marker, marker + "\n  ctx.restore();", 1)
+          else:
+              text = text.replace(old, "  const trailState=drawMarketTrail(candles,mode,levels,ev);\n  ctx.restore();\n  ...", 1)
+
+          path.write_text(text)
+          PY
+
+      - name: Commit boundary fix
+        run: |
+          if git diff --quiet -- app.js; then
+            echo "No app.js changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app.js
+          git commit -m "Keep chart annotations inside plotting area"
+          git push
