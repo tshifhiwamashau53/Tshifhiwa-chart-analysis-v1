@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">T.SHIFHIWA • CHART ANALYZER</p>
         <h1>Read the candles.<br><span>Follow the structure.</span></h1>
-        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity, break-and-retest structure, macro events and a hypothetical market path.</p>
+        <p class="sub">Upload a chart screenshot and get technical analysis covering market structure, liquidity, candle behaviour, momentum, break and retest, ICT / SMC concepts, Wyckoff and price action. No predicted drawing is placed over your chart.</p>
       </div>
       <div class="badge">EDUCATIONAL</div>
     </header>
@@ -26,7 +26,7 @@
 
     <section id="workspace" class="workspace hidden">
       <div class="canvas-wrap">
-        <div class="chart-label">ANNOTATED CHART</div>
+        <div class="chart-label">SOURCE CHART</div>
         <canvas id="chartCanvas"></canvas>
       </div>
       <div class="controls">
@@ -39,7 +39,7 @@
             <option value="mixed">Show mixed evidence</option>
           </select>
         </div>
-        <button id="analyzeBtn" class="primary analyze">Analyze candles & structure</button>
+        <button id="analyzeBtn" class="primary analyze">Analyze technical structure</button>
         <button id="resetBtn" class="secondary">Reset</button>
       </div>
     </section>
@@ -47,58 +47,44 @@
     <section id="result" class="result hidden">
       <div class="result-head">
         <div>
-          <p class="eyebrow">ANALYSIS RESULT</p>
-          <h2 id="setupTitle">Chart scenario</h2>
+          <p class="eyebrow">TECHNICAL ANALYSIS</p>
+          <h2 id="setupTitle">Chart technical bias</h2>
         </div>
         <span id="confidence" class="confidence">—</span>
       </div>
 
       <div class="levels">
-        <div class="level"><span class="dot entry-dot"></span><div><small>WHERE TO WATCH</small><strong>Confirmation zone marked</strong></div></div>
-        <div class="level"><span class="dot tp-dot"></span><div><small>WHERE IT MAY CONTINUE</small><strong>Potential target area marked</strong></div></div>
-        <div class="level"><span class="dot sl-dot"></span><div><small>SCENARIO INVALIDATION</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot entry-dot"></span><div><small>STRUCTURE</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>LIQUIDITY</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>CONFIRMATION</small><strong>Waiting for analysis</strong></div></div>
       </div>
 
-      <section class="trail-panel">
-        <div class="trail-head">
-          <div>
-            <p class="eyebrow">HYPOTHETICAL MARKET PATH</p>
-            <h3 id="trailTitle">Possible path through the structure</h3>
-          </div>
-          <span id="trailStatus" class="trail-status">WAIT</span>
-        </div>
-        <div class="trail-steps" id="trailSteps">
-          <span>Current</span><i>→</i><span>Liquidity</span><i>→</i><span>Break</span><i>→</i><span>Pullback</span><i>→</i><span>Retest</span><i>→</i><span>Confirm</span><i>→</i><span>Continue</span>
-        </div>
-        <p id="trailExplanation" class="trail-explanation">The analyzer will draw a hypothetical path after the chart is analyzed.</p>
-      </section>
-
       <section class="confirmation-card">
-        <div class="confirmation-icon">C</div>
+        <div class="confirmation-icon">TA</div>
         <div>
-          <p class="eyebrow">CONFIRMATION POINT</p>
-          <h3>Wait for the retest to confirm the scenario</h3>
-          <p>The highlighted confirmation/watch zone is the area the analyzer identifies for studying whether the broken structure holds. A confirmation candle can support or invalidate the hypothetical path.</p>
+          <p class="eyebrow">TECHNICAL CONFIRMATION</p>
+          <h3>Study the structure and candle response</h3>
+          <p>The analyzer focuses on technical evidence rather than drawing a predicted route over the screenshot.</p>
         </div>
       </section>
 
       <div class="strategy-grid" id="strategyDetails">
-        <div><b>ICT / SMC</b><span>Waiting for analysis</span></div>
-        <div><b>Candles</b><span>Waiting for analysis</span></div>
-        <div><b>Wyckoff / Price Action</b><span>Waiting for analysis</span></div>
-        <div><b>Pattern engine</b><span>Waiting for analysis</span></div>
+        <div><b>Market structure</b><span>Waiting for analysis</span></div>
+        <div><b>Liquidity</b><span>Waiting for analysis</span></div>
+        <div><b>Candle behaviour</b><span>Waiting for analysis</span></div>
+        <div><b>Technical conclusion</b><span>Waiting for analysis</span></div>
       </div>
 
       <div class="why">
-        <p class="eyebrow">WHY THE SCENARIO EXISTS</p>
-        <p id="reasoning" class="reasoning"></p>
+        <p class="eyebrow">TECHNICAL REASONING</p>
+        <div id="reasoning" class="reasoning"></div>
       </div>
 
       <section class="fundamentals-panel">
         <div class="fund-head">
           <div>
             <p class="eyebrow">NEWS & FUNDAMENTALS</p>
-            <h3>Why a technical direction can suddenly change</h3>
+            <h3>Why technical direction can suddenly change</h3>
           </div>
           <span class="macro-status">MACRO CONTEXT</span>
         </div>
@@ -107,18 +93,19 @@
       </section>
 
       <div class="future-panel">
-        <div><b>Confirmation before continuation</b><span>The trail separates the possible movement from the confirmation point. It does not present the projected path as certain.</span></div>
-        <div><b>No invented prices</b><span>This version works from visible chart geometry and does not manufacture price values from the screenshot.</span></div>
-        <div><b>News can override a setup</b><span>A major release or unexpected headline can invalidate a technical scenario. The fundamental layer explains the mechanism rather than pretending the outcome is known.</span></div>
+        <div><b>Structure first</b><span>The analyzer studies visible market structure, liquidity and candle behaviour before forming a technical bias.</span></div>
+        <div><b>No invented prices</b><span>This version does not manufacture price values from a screenshot.</span></div>
+        <div><b>News matters</b><span>A major release or unexpected headline can invalidate a technical scenario, so the fundamental layer is considered separately.</span></div>
       </div>
 
-      <p class="notice">The trail is a hypothetical visual scenario, not a guaranteed prediction. Screenshot quality, missing candles, chart settings and new information can change the result.</p>
-      <button id="saveBtn" class="primary save">Save / Share annotated chart</button>
+      <p class="notice">Technical analysis is based on the visible screenshot. Screenshot quality, missing candles, chart settings and new information can change the result.</p>
+      <button id="saveBtn" class="primary save">Save chart</button>
     </section>
 
-    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Macro Context • Scenario Trail</footer>
+    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Macro Context</footer>
   </main>
   <script src="app.js"></script>
   <script src="fundamentals.js"></script>
+  <script src="technical-only.js"></script>
 </body>
 </html>
