@@ -26,6 +26,7 @@
 
     <section id="workspace" class="workspace hidden">
       <div class="canvas-wrap">
+        <div class="chart-label">ANNOTATED CHART</div>
         <canvas id="chartCanvas"></canvas>
       </div>
       <div class="controls">
@@ -53,9 +54,9 @@
       </div>
 
       <div class="levels">
-        <div class="level"><span class="dot entry-dot"></span><div><small>WATCH / CONFIRMATION ZONE</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot tp-dot"></span><div><small>POTENTIAL TARGET AREA</small><strong>Marked on chart</strong></div></div>
-        <div class="level"><span class="dot sl-dot"></span><div><small>INVALIDATION AREA</small><strong>Marked on chart</strong></div></div>
+        <div class="level"><span class="dot entry-dot"></span><div><small>WHERE TO WATCH</small><strong>Confirmation zone marked</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>WHERE IT MAY CONTINUE</small><strong>Potential target area marked</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>SCENARIO INVALIDATION</small><strong>Marked on chart</strong></div></div>
       </div>
 
       <section class="trail-panel">
@@ -67,9 +68,18 @@
           <span id="trailStatus" class="trail-status">WAIT</span>
         </div>
         <div class="trail-steps" id="trailSteps">
-          <span>Current area</span><i>→</i><span>Liquidity</span><i>→</i><span>Break</span><i>→</i><span>Retest</span><i>→</i><span>Confirmation</span><i>→</i><span>Continuation</span>
+          <span>Current</span><i>→</i><span>Liquidity</span><i>→</i><span>Break</span><i>→</i><span>Pullback</span><i>→</i><span>Retest</span><i>→</i><span>Confirm</span><i>→</i><span>Continue</span>
         </div>
         <p id="trailExplanation" class="trail-explanation">The analyzer will draw a hypothetical path after the chart is analyzed.</p>
+      </section>
+
+      <section class="confirmation-card">
+        <div class="confirmation-icon">C</div>
+        <div>
+          <p class="eyebrow">CONFIRMATION POINT</p>
+          <h3>Wait for the retest to confirm the scenario</h3>
+          <p>The highlighted confirmation/watch zone is the area the analyzer identifies for studying whether the broken structure holds. A confirmation candle can support or invalidate the hypothetical path.</p>
+        </div>
       </section>
 
       <div class="strategy-grid" id="strategyDetails">
@@ -85,7 +95,7 @@
       </div>
 
       <div class="future-panel">
-        <div><b>Confirmation before continuation</b><span>The chart marks the area where a break-and-retest confirmation would be studied. It does not tell you to place a real-money trade.</span></div>
+        <div><b>Confirmation before continuation</b><span>The trail separates the possible movement from the confirmation point. It does not present the projected path as certain.</span></div>
         <div><b>No invented prices</b><span>This version works from visible chart geometry and does not manufacture price values from the screenshot.</span></div>
       </div>
 
