@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">T.SHIFHIWA • CHART ANALYZER</p>
         <h1>Read the candles.<br><span>Follow the structure.</span></h1>
-        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity, break-and-retest structure and a hypothetical market path.</p>
+        <p class="sub">Upload a chart screenshot and study candle behaviour, ICT, SMC, Wyckoff, price action, liquidity, break-and-retest structure, macro events and a hypothetical market path.</p>
       </div>
       <div class="badge">EDUCATIONAL</div>
     </header>
@@ -94,17 +94,31 @@
         <p id="reasoning" class="reasoning"></p>
       </div>
 
+      <section class="fundamentals-panel">
+        <div class="fund-head">
+          <div>
+            <p class="eyebrow">NEWS & FUNDAMENTALS</p>
+            <h3>Why a technical direction can suddenly change</h3>
+          </div>
+          <span class="macro-status">MACRO CONTEXT</span>
+        </div>
+        <div id="fundamentalExplanation" class="fundamental-explanation"></div>
+        <div id="fundamentalGrid" class="fund-grid"></div>
+      </section>
+
       <div class="future-panel">
         <div><b>Confirmation before continuation</b><span>The trail separates the possible movement from the confirmation point. It does not present the projected path as certain.</span></div>
         <div><b>No invented prices</b><span>This version works from visible chart geometry and does not manufacture price values from the screenshot.</span></div>
+        <div><b>News can override a setup</b><span>A major release or unexpected headline can invalidate a technical scenario. The fundamental layer explains the mechanism rather than pretending the outcome is known.</span></div>
       </div>
 
-      <p class="notice">The trail is a hypothetical visual scenario, not a guaranteed prediction. Screenshot quality, missing candles and chart settings can change the result.</p>
+      <p class="notice">The trail is a hypothetical visual scenario, not a guaranteed prediction. Screenshot quality, missing candles, chart settings and new information can change the result.</p>
       <button id="saveBtn" class="primary save">Save / Share annotated chart</button>
     </section>
 
-    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Scenario Trail</footer>
+    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Macro Context • Scenario Trail</footer>
   </main>
   <script src="app.js"></script>
+  <script src="fundamentals.js"></script>
 </body>
 </html>
