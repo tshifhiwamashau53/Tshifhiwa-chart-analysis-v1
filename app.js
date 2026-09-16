@@ -49,6 +49,13 @@ function drawBase() {
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+
+// Keep all analysis graphics inside the chart plotting area.
+// The far-right price scale/numbers are part of the original screenshot and must stay untouched.
+const PLOT_LEFT_RATIO = 0.035;
+const PLOT_RIGHT_RATIO = 0.86;
+function getPlotLeft(){ return canvas.width * PLOT_LEFT_RATIO; }
+function getPlotRight(){ return Math.max(getPlotLeft()+40, Math.min(canvas.width * PLOT_RIGHT_RATIO, canvas.width - 8)); }
 function median(a){ if(!a.length)return 0; const x=[...a].sort((m,n)=>m-n); return x[Math.floor(x.length/2)]; }
 function classifyPixel(r,g,b){
   const bullish = g > r * 1.12 && g > b * 1.06 && g > 85;
@@ -61,7 +68,8 @@ function detectCandles(){
   const W=canvas.width,H=canvas.height;
   const minY=Math.round(H*.06), maxY=Math.round(H*.92);
   const scores=[];
-  for(let x=0;x<W;x++){
+  const plotRight = Math.floor(getPlotRight());
+  for(let x=0;x<plotRight;x++){
     let bull=0,bear=0;
     for(let y=minY;y<maxY;y++){
       const i=(y*W+x)*4,c=classifyPixel(data[i],data[i+1],data[i+2]);
@@ -157,14 +165,14 @@ function strategyEvidence(candles){
 }
 
 function drawLine(y,label,kind){
-  const x=canvas.width*.035,w=canvas.width*.93;
+  const x=getPlotLeft(),w=Math.max(1,getPlotRight()-x);
   ctx.save();ctx.lineWidth=Math.max(2,canvas.width/600);ctx.setLineDash([10,7]);
   ctx.strokeStyle=kind==='watch'?'#3d6df2':kind==='target'?'#17865a':'#c94747';
   ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w,y);ctx.stroke();ctx.setLineDash([]);
   ctx.font='700 13px system-ui';ctx.fillStyle=ctx.strokeStyle;ctx.fillText(label,x+8,clamp(y-9,18,canvas.height-8));ctx.restore();
 }
 function drawZone(y1,y2,label,kind){
-  const x=canvas.width*.035,w=canvas.width*.93;
+  const x=getPlotLeft(),w=Math.max(1,getPlotRight()-x);
   const c=kind==='watch'?'#3d6df2':kind==='target'?'#17865a':'#c94747';
   ctx.save();ctx.globalAlpha=.10;ctx.fillStyle=c;ctx.fillRect(x,Math.min(y1,y2),w,Math.abs(y2-y1));ctx.globalAlpha=1;ctx.restore();
   drawLine((y1+y2)/2,label,kind);
@@ -185,7 +193,11 @@ function drawArrow(x1,y1,x2,y2,label,kind='path'){
   ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);
   const ang=Math.atan2(y2-y1,x2-x1),size=Math.max(7,canvas.width*.012);
   ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-size*Math.cos(ang-.45),y2-size*Math.sin(ang-.45));ctx.lineTo(x2-size*Math.cos(ang+.45),y2-size*Math.sin(ang+.45));ctx.closePath();ctx.fill();
-  if(label){ctx.font='700 12px system-ui';ctx.fillText(label,clamp((x1+x2)/2-30,6,canvas.width-90),clamp((y1+y2)/2-8,18,canvas.height-8));}
+  if(label){
+    ctx.font='700 12px system-ui';
+    const labelMax=Math.max(6,getPlotRight()-90);
+    ctx.fillText(label,clamp((x1+x2)/2-30,6,labelMax),clamp((y1+y2)/2-8,18,canvas.height-8));
+  }
   ctx.restore();
 }
 
@@ -201,11 +213,13 @@ function drawMarketTrail(candles,bias,levels,ev){
   const pullbackDistance=range*.16;
   const retestSeen=bias==='bullish' ? last.bottom>levels.watch-pullbackDistance : bias==='bearish' ? last.top<levels.watch+pullbackDistance : false;
   const confirmation=(bias!=='mixed')&&(ev.patterns.some(p=>/displacement|engulfing|momentum/.test(p)) || ev.evidence.some(x=>/displacement/.test(x)));
-  const x0=last.x;
-  const x1=clamp(x0+canvas.width*.08,x0+20,canvas.width*.38);
-  const x2=clamp(x0+canvas.width*.18,x1+20,canvas.width*.58);
-  const x3=clamp(x0+canvas.width*.30,x2+20,canvas.width*.75);
-  const x4=clamp(x0+canvas.width*.42,x3+20,canvas.width*.92);
+  const x0=clamp(last.x,getPlotLeft(),getPlotRight()-8);
+  const trailRight=Math.max(x0+24,getPlotRight()-12);
+  const span=Math.max(24,trailRight-x0);
+  const x1=clamp(x0+span*.22,x0+8,trailRight);
+  const x2=clamp(x0+span*.45,x1+6,trailRight);
+  const x3=clamp(x0+span*.68,x2+6,trailRight);
+  const x4=clamp(x0+span*.90,x3+6,trailRight);
   const y0=last.top+(last.bottom-last.top)*.5;
   const liquidityY=bias==='bullish'?Math.min(...recent.map(c=>c.bottom)):bias==='bearish'?Math.max(...recent.map(c=>c.top)):y0;
   const breakY=bias==='bullish'?Math.max(0,liquidityY-range*.35):bias==='bearish'?Math.min(canvas.height,liquidityY+range*.35):y0;
@@ -251,6 +265,11 @@ function analyse(){
   const levels=annotate(candles,mode);
   const recent=candles.length?candles.slice(-Math.min(18,candles.length)):[{top:canvas.height*.25,bottom:canvas.height*.75}];
   const range=Math.max(16,Math.max(...recent.map(c=>c.bottom))-Math.min(...recent.map(c=>c.top)));
+  const plotRight=getPlotRight();
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0,0,plotRight,canvas.height);
+  ctx.clip();
   drawZone(levels.watch-range*.025,levels.watch+range*.025,'CONFIRMATION / WATCH','watch');
   drawZone(levels.target-range*.025,levels.target+range*.025,'POTENTIAL TARGET','target');
   drawZone(levels.invalidation-range*.025,levels.invalidation+range*.025,'INVALIDATION','risk');
@@ -260,6 +279,7 @@ function analyse(){
   for(const i of sw.lows.slice(-3)){ctx.beginPath();ctx.moveTo(candles[i].left,candles[i].bottom);ctx.lineTo(candles[i].right,candles[i].bottom);ctx.stroke();}
   ctx.restore();
   const trailState=drawMarketTrail(candles,mode,levels,ev);
+  ctx.restore();
   const total=ev.bull+ev.bear;
   const confidence=total?Math.round(50+Math.min(45,Math.abs(ev.bull-ev.bear)/(total+2)*45)):0;
   document.getElementById('setupTitle').textContent=mode==='bullish'?'Bullish scenario':mode==='bearish'?'Bearish scenario':'Mixed / conflicting evidence';
