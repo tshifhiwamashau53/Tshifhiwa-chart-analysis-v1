@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">T.SHIFHIWA • CHART ANALYZER</p>
         <h1>Read the candles.<br><span>Follow the structure.</span></h1>
-        <p class="sub">Upload a chart screenshot and get technical analysis covering market structure, liquidity, candle behaviour, momentum, break and retest, ICT / SMC concepts, Wyckoff and price action. No predicted drawing is placed over your chart.</p>
+        <p class="sub">Upload a chart screenshot and get technical analysis using ICT, SMC, market structure, liquidity, order blocks, fair value gaps, Wyckoff and price action.</p>
       </div>
       <div class="badge">EDUCATIONAL</div>
     </header>
@@ -26,7 +26,7 @@
 
     <section id="workspace" class="workspace hidden">
       <div class="canvas-wrap">
-        <div class="chart-label">SOURCE CHART</div>
+        <div class="chart-label">TECHNICAL CHART</div>
         <canvas id="chartCanvas"></canvas>
       </div>
       <div class="controls">
@@ -54,25 +54,26 @@
       </div>
 
       <div class="levels">
-        <div class="level"><span class="dot entry-dot"></span><div><small>STRUCTURE</small><strong>Waiting for analysis</strong></div></div>
-        <div class="level"><span class="dot tp-dot"></span><div><small>LIQUIDITY</small><strong>Waiting for analysis</strong></div></div>
-        <div class="level"><span class="dot sl-dot"></span><div><small>CONFIRMATION</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot entry-dot"></span><div><small>ENTRY</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot tp-dot"></span><div><small>TP</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot sl-dot"></span><div><small>SL</small><strong>Waiting for analysis</strong></div></div>
+        <div class="level"><span class="dot"></span><div><small>ORDER BLOCK</small><strong>Waiting for analysis</strong></div></div>
       </div>
 
       <section class="confirmation-card">
-        <div class="confirmation-icon">TA</div>
+        <div class="confirmation-icon">ICT</div>
         <div>
-          <p class="eyebrow">TECHNICAL CONFIRMATION</p>
-          <h3>Study the structure and candle response</h3>
-          <p>The analyzer focuses on technical evidence rather than drawing a predicted route over the screenshot.</p>
+          <p class="eyebrow">ICT / SMC CONFIRMATION</p>
+          <h3>Structure, liquidity and institutional zones</h3>
+          <p>The chart is annotated with technical zones such as order blocks, fair value gaps, liquidity and structural breaks. ENTRY, TP and SL are shown as chart locations only; no price values are invented.</p>
         </div>
       </section>
 
       <div class="strategy-grid" id="strategyDetails">
         <div><b>Market structure</b><span>Waiting for analysis</span></div>
         <div><b>Liquidity</b><span>Waiting for analysis</span></div>
-        <div><b>Candle behaviour</b><span>Waiting for analysis</span></div>
-        <div><b>Technical conclusion</b><span>Waiting for analysis</span></div>
+        <div><b>Order blocks / FVG</b><span>Waiting for analysis</span></div>
+        <div><b>ICT conclusion</b><span>Waiting for analysis</span></div>
       </div>
 
       <div class="why">
@@ -93,16 +94,16 @@
       </section>
 
       <div class="future-panel">
-        <div><b>Structure first</b><span>The analyzer studies visible market structure, liquidity and candle behaviour before forming a technical bias.</span></div>
-        <div><b>No invented prices</b><span>This version does not manufacture price values from a screenshot.</span></div>
-        <div><b>News matters</b><span>A major release or unexpected headline can invalidate a technical scenario, so the fundamental layer is considered separately.</span></div>
+        <div><b>ICT first</b><span>Structure, liquidity, displacement, order blocks and fair value gaps are evaluated together.</span></div>
+        <div><b>No invented prices</b><span>ENTRY, TP and SL are chart locations; the analyzer does not manufacture price values.</span></div>
+        <div><b>News matters</b><span>A major release or unexpected headline can invalidate a technical scenario.</span></div>
       </div>
 
       <p class="notice">Technical analysis is based on the visible screenshot. Screenshot quality, missing candles, chart settings and new information can change the result.</p>
-      <button id="saveBtn" class="primary save">Save chart</button>
+      <button id="saveBtn" class="primary save">Save annotated chart</button>
     </section>
 
-    <footer>Candle structure • ICT / SMC • Wyckoff • Price Action • Liquidity • Break & Retest • Macro Context</footer>
+    <footer>ICT • SMC • Order Blocks • Fair Value Gaps • Liquidity • BOS • CHoCH • Wyckoff • Price Action • Macro Context</footer>
   </main>
   <script src="app.js"></script>
   <script src="fundamentals.js"></script>
