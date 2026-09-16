@@ -15,6 +15,7 @@ const trailExplanation = document.getElementById('trailExplanation');
 let image = null;
 let originalName = 'chart';
 let lastAnalysis = null;
+window.lastAnalysis = null;
 
 upload.onclick = () => input.click();
 input.onchange = () => {
@@ -205,7 +206,6 @@ function drawMarketTrail(candles,bias,levels,ev){
   const x2=clamp(x0+canvas.width*.18,x1+20,canvas.width*.58);
   const x3=clamp(x0+canvas.width*.30,x2+20,canvas.width*.75);
   const x4=clamp(x0+canvas.width*.42,x3+20,canvas.width*.92);
-  const directionSign=bias==='bullish'?-1:bias==='bearish'?1:0;
   const y0=last.top+(last.bottom-last.top)*.5;
   const liquidityY=bias==='bullish'?Math.min(...recent.map(c=>c.bottom)):bias==='bearish'?Math.max(...recent.map(c=>c.top)):y0;
   const breakY=bias==='bullish'?Math.max(0,liquidityY-range*.35):bias==='bearish'?Math.min(canvas.height,liquidityY+range*.35):y0;
@@ -274,12 +274,13 @@ function analyse(){
   const detail=document.getElementById('strategyDetails');
   if(detail)detail.innerHTML=`<div><b>ICT / SMC</b><span>${ev.evidence.filter(x=>/liquidity|equal-|structure/.test(x)).join(' • ')||'No strong visual confirmation'}</span></div><div><b>Candles</b><span>${ev.patterns.join(' • ')||'No high-confidence candle pattern detected'}</span></div><div><b>Wyckoff / Price Action</b><span>${ev.evidence.filter(x=>/range|compression|rejection|momentum/.test(x)).join(' • ')||'No strong visual confirmation'}</span></div><div><b>Pattern engine</b><span>Major swing, break, retest and range relationships are checked from the uploaded image.</span></div>`;
   lastAnalysis={mode,candles,ev,levels,trailState};
+  window.lastAnalysis=lastAnalysis;
   result.classList.remove('hidden');
   result.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 document.getElementById('analyzeBtn').onclick=analyse;
-document.getElementById('resetBtn').onclick=()=>{if(image){drawBase();result.classList.add('hidden');lastAnalysis=null;}};
+document.getElementById('resetBtn').onclick=()=>{if(image){drawBase();result.classList.add('hidden');lastAnalysis=null;window.lastAnalysis=null;}};
 
 async function saveAnnotatedChart(){
   if(!image)return;
