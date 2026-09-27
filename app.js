@@ -245,6 +245,35 @@ function buildTrailText(bias,state){
   return `Hypothetical ${side} path: current area → liquidity → possible structure break → pullback/retest → confirmation/watch zone → possible continuation. Confirmation is not yet strong enough to treat the path as established.`;
 }
 
+function buildReport(bias,evidence,patterns,candles,levels,trailState){
+  const structure=evidence.filter(x=>/structure|range|swing/i.test(x)).join('; ')||'No decisive BOS/CHoCH or clear swing sequence can be confirmed visually.';
+  const liquidity=evidence.filter(x=>/liquidity|equal-|sweep/i.test(x)).join('; ')||'No decisive liquidity sweep is confirmed from the screenshot.';
+  const wyckoff=evidence.filter(x=>/range|compression|rejection|momentum/i.test(x)).join('; ')||'No clear Wyckoff event can be confirmed visually.';
+  const exec=bias==='mixed'?'WAIT — conflicting evidence. Wait for a clear structural break and retest.':trailState.confirmed?'Confirmation detected visually; verify the marked level and invalidation before any decision.':'WAIT — directional evidence exists, but confirmation is not established.';
+  return `<div class="analysis-report">
+<h3>📈 TSHIFHIWA CHART ANALYSIS REPORT</h3>
+<h4>🎯 1. Executive Summary & Bias</h4>
+<p><b>Overall Bias:</b> ${bias==='bullish'?'Bullish':bias==='bearish'?'Bearish':'Neutral / Consolidating'}</p>
+<p><b>Order Block Zone:</b> Candidate visual zone only; no price value is invented.</p>
+<p><b>Timeframe Context:</b> Based only on the visible screenshot; higher- vs lower-timeframe context is not assumed unless shown.</p>
+<h4>🔍 2. Technical & SMC Breakdown</h4>
+<p><b>Market Structure:</b> ${structure}</p>
+<p><b>Order Blocks & Imbalances:</b> Visual OB/FVG candidates are annotated on the chart; validity is assessed from displacement and follow-through.</p>
+<p><b>Liquidity State:</b> ${liquidity}</p>
+<p><b>Wyckoff Phase:</b> ${wyckoff}</p>
+<h4>📐 3. Trade Execution & Risk Management</h4>
+<p><b>Entry Price:</b> Chart location only — see ENTRY annotation.</p>
+<p><b>Stop Loss (SL):</b> Chart location only — see SL annotation.</p>
+<p><b>Take Profit (TP):</b> Chart location only — see TP annotation.</p>
+<p><b>Risk-to-Reward Ratio (R:R):</b> Not calculated as a numeric ratio because this standalone analyzer does not invent price values.</p>
+<p><b>Invalidation Point:</b> See the marked INVALIDATION area on the chart.</p>
+<h4>📰 4. Macro & News Confluences</h4>
+<p>Live news is not fetched. Add any NFP, CPI, FOMC, rate-decision or other macro context yourself if you want it considered.</p>
+<h4>💡 5. Key Trade Takeaway & Reference</h4>
+<blockquote>${exec} Technical analysis is probabilistic and never guarantees an outcome.</blockquote>
+</div>`;
+}
+
 function buildExplanation(bias,evidence,patterns,candles){
   const parts=[];
   if(evidence.length)parts.push(evidence.slice(0,5).join('; ')+'.');
@@ -284,7 +313,7 @@ function analyse(){
   const confidence=total?Math.round(50+Math.min(45,Math.abs(ev.bull-ev.bear)/(total+2)*45)):0;
   document.getElementById('setupTitle').textContent=mode==='bullish'?'Bullish scenario':mode==='bearish'?'Bearish scenario':'Mixed / conflicting evidence';
   document.getElementById('confidence').textContent=`Visual evidence ${confidence}%`;
-  reasoning.textContent=buildExplanation(mode,ev.evidence,ev.patterns,candles);
+  reasoning.innerHTML=buildReport(mode,ev.evidence,ev.patterns,candles,levels,trailState);
   trailStatus.textContent=mode==='mixed'?'WAIT':trailState.confirmed?'CONFIRMATION DETECTED':'WAIT FOR CONFIRMATION';
   trailTitle.textContent=mode==='mixed'?'No clean path — evidence conflicts':mode==='bullish'?'Possible bullish path':'Possible bearish path';
   trailExplanation.textContent=buildTrailText(mode,trailState);
