@@ -14,12 +14,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function label(x, y, text, stroke) {
     ctx.save();
-    ctx.font = '700 12px system-ui, sans-serif';
+    const fontSize = Math.max(10, Math.min(12, canvas.width / 95));
+    ctx.font = '800 ' + fontSize + 'px system-ui, sans-serif';
+    const padX = 7, padY = 5;
+    const maxW = Math.max(70, getPlotRight() - getPlotLeft() - 14);
+    const measured = Math.min(maxW, ctx.measureText(text).width + padX * 2);
+    const left = clamp(x, getPlotLeft() + 4, getPlotRight() - measured - 4);
+    const top = clamp(y - fontSize - padY, 4, canvas.height - fontSize - padY * 2 - 4);
+    ctx.fillStyle = 'rgba(255,255,255,.96)';
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.roundRect(left, top, measured, fontSize + padY * 2, 6);
+    ctx.fill();
+    ctx.stroke();
     ctx.fillStyle = stroke;
-    ctx.strokeStyle = 'rgba(255,255,255,.94)';
-    ctx.lineWidth = 4;
-    ctx.strokeText(text, x, y);
-    ctx.fillText(text, x, y);
+    ctx.fillText(text, left + padX, top + fontSize + 1);
     ctx.restore();
   }
 
@@ -38,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.strokeStyle = stroke;
     ctx.strokeRect(left, top, right - left, bottom - top);
     ctx.restore();
-    label(left + 5, clamp(top - 6, 15, canvas.height - 8), text, stroke);
+    label(left + 5, top - 2, text, stroke);
   }
 
   function horizontal(y, text, stroke) {
@@ -54,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.lineTo(right, yy);
     ctx.stroke();
     ctx.restore();
-    label(left + 7, clamp(yy - 7, 15, canvas.height - 8), text, stroke);
+    label(left + 7, yy - 2, text, stroke);
   }
 
   function findOrderBlocks(candles, start, avg) {
@@ -172,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.globalAlpha = .55;
       ctx.beginPath(); ctx.moveTo(Math.max(getPlotLeft(), c.left), c.top); ctx.lineTo(right, c.top); ctx.stroke();
       ctx.restore();
-      label(Math.max(getPlotLeft() + 4, c.left), clamp(c.top - 6, 15, canvas.height - 8), 'BUY-SIDE LIQUIDITY', '#555');
+      label(Math.max(getPlotLeft() + 4, c.left), c.top - 2, 'BUY-SIDE LIQUIDITY', '#555');
     });
     lowIdx.forEach(i => {
       const c = candles[i];
@@ -182,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.globalAlpha = .55;
       ctx.beginPath(); ctx.moveTo(Math.max(getPlotLeft(), c.left), c.bottom); ctx.lineTo(right, c.bottom); ctx.stroke();
       ctx.restore();
-      label(Math.max(getPlotLeft() + 4, c.left), clamp(c.bottom + 15, 15, canvas.height - 6), 'SELL-SIDE LIQUIDITY', '#555');
+      label(Math.max(getPlotLeft() + 4, c.left), c.bottom + 15, 'SELL-SIDE LIQUIDITY', '#555');
     });
 
     // Structural break markers.
@@ -190,16 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevHigh = highIdx.length ? candles[highIdx[highIdx.length - 1]] : null;
     const prevLow = lowIdx.length ? candles[lowIdx[lowIdx.length - 1]] : null;
     if (prevHigh && last.top < prevHigh.top) {
-      label(clamp(last.x + 5, getPlotLeft(), right - 75), clamp(last.top - 12, 15, canvas.height - 8), 'BOS / CHoCH', '#3d6df2');
+      label(clamp(last.x + 5, getPlotLeft(), right - 90), last.top - 12, 'BOS / CHoCH', '#3d6df2');
     }
     if (prevLow && last.bottom > prevLow.bottom) {
-      label(clamp(last.x + 5, getPlotLeft(), right - 75), clamp(last.bottom + 18, 15, canvas.height - 8), 'BOS / CHoCH', '#c94747');
+      label(clamp(last.x + 5, getPlotLeft(), right - 90), last.bottom + 18, 'BOS / CHoCH', '#c94747');
     }
 
     // Displacement is important to ICT order-block validity.
     const strongest = recent.reduce((a, b) => b.range > a.range ? b : a, recent[0]);
     if (strongest && strongest.range > avg * 1.45) {
-      label(clamp(strongest.left, getPlotLeft(), right - 105), clamp(strongest.top - 8, 15, canvas.height - 8), 'DISPLACEMENT', strongest.dir === 'bullish' ? '#17865a' : '#c94747');
+      label(clamp(strongest.left, getPlotLeft(), right - 105), strongest.top - 8, 'DISPLACEMENT', strongest.dir === 'bullish' ? '#17865a' : '#c94747');
     }
 
     // Easy-to-read chart locations requested by the user.
